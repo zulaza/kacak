@@ -1,1 +1,271 @@
-# kacak
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Z Altın | Giriş Yap</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
+    body{
+      min-height:100vh;
+      background:
+        radial-gradient(circle at top left, rgba(255,204,0,.15), transparent 25%),
+        radial-gradient(circle at bottom right, rgba(255,140,0,.14), transparent 22%),
+        linear-gradient(135deg,#0d1016,#141923,#0a0c11);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+    .wrap{
+      width:100%;
+      max-width:1100px;
+      min-height:650px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:24px;
+      overflow:hidden;
+      background:rgba(255,255,255,.03);
+      box-shadow:0 30px 80px rgba(0,0,0,.35);
+      backdrop-filter:blur(10px);
+    }
+    .left{
+      padding:48px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.12), rgba(0,0,0,.35)),
+        url("https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1400&q=80") center/cover no-repeat;
+      position:relative;
+    }
+    .left::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(120deg, rgba(10,12,17,.35), rgba(10,12,17,.72));
+    }
+    .left>*{position:relative;z-index:1}
+    .brand{
+      display:inline-block;
+      width:fit-content;
+      padding:10px 16px;
+      border-radius:999px;
+      background:linear-gradient(135deg,#ffcc00,#ff9500);
+      color:#111;
+      font-weight:800;
+      margin-bottom:24px;
+    }
+    .left h1{
+      font-size:52px;
+      line-height:1.05;
+      margin-bottom:18px;
+    }
+    .left p{
+      max-width:480px;
+      font-size:17px;
+      line-height:1.7;
+      color:rgba(255,255,255,.88);
+    }
+    .right{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:34px;
+    }
+    .card{
+      width:100%;
+      max-width:430px;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:20px;
+      padding:30px;
+    }
+    .card h2{
+      font-size:32px;
+      margin-bottom:8px;
+    }
+    .muted{
+      color:rgba(255,255,255,.68);
+      line-height:1.6;
+      margin-bottom:24px;
+    }
+    .form{display:flex;flex-direction:column;gap:10px}
+    .form label{
+      font-size:14px;
+      color:#f1f1f1;
+      margin-top:4px;
+    }
+    .form input{
+      width:100%;
+      height:54px;
+      border:1px solid rgba(255,255,255,.1);
+      border-radius:14px;
+      background:rgba(255,255,255,.05);
+      color:#fff;
+      padding:0 14px;
+      outline:none;
+      font-size:15px;
+    }
+    .form input:focus{
+      border-color:rgba(255,204,0,.9);
+      box-shadow:0 0 0 4px rgba(255,204,0,.12);
+    }
+    .password-wrap{position:relative}
+    .toggle-btn{
+      position:absolute;
+      top:50%;
+      right:10px;
+      transform:translateY(-50%);
+      border:none;
+      background:transparent;
+      color:#ffcc00;
+      cursor:pointer;
+      font-weight:700;
+    }
+    .primary-btn{
+      margin-top:10px;
+      width:100%;
+      height:54px;
+      border:none;
+      border-radius:14px;
+      cursor:pointer;
+      font-size:15px;
+      font-weight:800;
+      background:linear-gradient(135deg,#ffcc00,#ff9500);
+      color:#111;
+    }
+    .message{
+      min-height:22px;
+      margin-top:10px;
+      font-size:14px;
+      color:#ffd36a;
+    }
+    .footer-links{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-top:18px;
+      flex-wrap:wrap;
+    }
+    .footer-links a,.link-btn{
+      color:#ffcc00;
+      text-decoration:none;
+      font-size:14px;
+      background:none;
+      border:none;
+      cursor:pointer;
+    }
+    @media(max-width:900px){
+      .wrap{grid-template-columns:1fr}
+      .left{min-height:300px}
+      .left h1{font-size:38px}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="left">
+      <div class="brand">Z Altın</div>
+      <h1>Hesabına giriş yap</h1>
+      <p>Güvenli şekilde hesabına bağlan, paneline eriş ve kullanıcı alanını yönet.</p>
+    </div>
+
+    <div class="right">
+      <div class="card">
+        <h2>Giriş Yap</h2>
+        <p class="muted">Devam etmek için e-posta ve şifreni gir.</p>
+
+        <form id="loginForm" class="form">
+          <label for="email">E-posta</label>
+          <input type="email" id="email" placeholder="ornek@mail.com" required />
+
+          <label for="password">Şifre</label>
+          <div class="password-wrap">
+            <input type="password" id="password" placeholder="Şifreniz" required />
+            <button type="button" class="toggle-btn" id="togglePassword">Göster</button>
+          </div>
+
+          <button type="submit" class="primary-btn">Giriş Yap</button>
+          <div id="message" class="message"></div>
+        </form>
+
+        <div class="footer-links">
+          <a href="register.html">Hesap oluştur</a>
+          <button class="link-btn" id="resetPasswordBtn" type="button">Şifremi unuttum</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const SUPABASE_URL = "BURAYA_SUPABASE_URL";
+    const SUPABASE_ANON_KEY = "BURAYA_SUPABASE_ANON_KEY";
+
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const loginForm = document.getElementById("loginForm");
+    const email = document.getElementById("email");
+    const password = document.getElementById("password");
+    const message = document.getElementById("message");
+    const togglePassword = document.getElementById("togglePassword");
+    const resetPasswordBtn = document.getElementById("resetPasswordBtn");
+
+    togglePassword.addEventListener("click", () => {
+      const isPassword = password.type === "password";
+      password.type = isPassword ? "text" : "password";
+      togglePassword.textContent = isPassword ? "Gizle" : "Göster";
+    });
+
+    async function checkSession() {
+      const { data } = await supabaseClient.auth.getSession();
+      if (data.session) {
+        window.location.href = "panel.html";
+      }
+    }
+
+    checkSession();
+
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      message.textContent = "Giriş yapılıyor...";
+
+      const { error } = await supabaseClient.auth.signInWithPassword({
+        email: email.value.trim(),
+        password: password.value
+      });
+
+      if (error) {
+        message.textContent = "Hata: " + error.message;
+        return;
+      }
+
+      message.textContent = "Giriş başarılı, yönlendiriliyorsun...";
+      setTimeout(() => {
+        window.location.href = "panel.html";
+      }, 800);
+    });
+
+    resetPasswordBtn.addEventListener("click", async () => {
+      if (!email.value.trim()) {
+        message.textContent = "Önce e-posta alanını doldur.";
+        return;
+      }
+
+      const { error } = await supabaseClient.auth.resetPasswordForEmail(email.value.trim(), {
+        redirectTo: window.location.origin + "/index.html"
+      });
+
+      if (error) {
+        message.textContent = "Hata: " + error.message;
+      } else {
+        message.textContent = "Şifre sıfırlama bağlantısı gönderildi.";
+      }
+    });
+  </script>
+</body>
+</html>
