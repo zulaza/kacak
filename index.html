@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ZULA Altın | Üyelik Sistemi</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <title>Zula Altın | Giriş Sistemi</title>
   <style>
     *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
     body{
@@ -106,7 +105,7 @@
     }
     .tabs{
       display:grid;
-      grid-template-columns:1fr 1fr 1fr;
+      grid-template-columns:1fr 1fr;
       gap:10px;
       margin-bottom:20px;
     }
@@ -171,19 +170,6 @@
       color:#ffcc00;
       cursor:pointer;
       font-weight:700;
-    }
-    .checkbox-line{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      margin-top:8px;
-      font-size:14px;
-      color:rgba(255,255,255,.84);
-    }
-    .checkbox-line input{
-      width:18px;
-      height:18px;
-      accent-color:#ffcc00;
     }
     .btn{
       width:100%;
@@ -254,16 +240,6 @@
       word-break:break-word;
       text-align:right;
     }
-    .admin-note{
-      margin-top:16px;
-      padding:14px;
-      border-radius:14px;
-      background:rgba(255,204,0,.08);
-      border:1px solid rgba(255,204,0,.18);
-      color:#ffe39b;
-      font-size:13px;
-      line-height:1.6;
-    }
     .footer-note{
       margin-top:16px;
       font-size:12px;
@@ -289,26 +265,26 @@
   <div class="app">
     <section class="hero">
       <div>
-        <div class="brand">Z Altın</div>
-        <h1>Gerçek çalışan üyelik sistemi</h1>
+        <div class="brand">Zula Altın</div>
+        <h1>Tek dosyalık giriş arayüzü</h1>
         <p>
-          Tek dosyalık arayüz ile kayıt, giriş, oturum kontrolü, kendi hesap bilgilerini görüntüleme
-          ve çıkış işlemleri tek yerden yönetilir.
+          Bu demo sürümde kullanıcı adı ve şifre alanı bulunur. Girişte doğrulama yapılmaz,
+          hiçbir bilgi sunucuya gönderilmez ve şifre kaydedilmez.
         </p>
       </div>
 
       <div class="hero-grid">
         <div class="hero-box">
-          <small>Kayıt</small>
-          <strong>E-posta + şifre</strong>
+          <small>Giriş</small>
+          <strong>Kullanıcı adı + şifre</strong>
         </div>
         <div class="hero-box">
-          <small>Oturum</small>
-          <strong>Gerçek auth</strong>
+          <small>Kontrol</small>
+          <strong>Doğrulama yok</strong>
         </div>
         <div class="hero-box">
-          <small>Yönetim</small>
-          <strong>Supabase panel</strong>
+          <small>Veri</small>
+          <strong>Kaydetmez</strong>
         </div>
       </div>
     </section>
@@ -317,22 +293,21 @@
       <div class="card">
         <div class="tabs">
           <button class="tab-btn active" data-tab="login">Giriş</button>
-          <button class="tab-btn" data-tab="register">Kayıt</button>
           <button class="tab-btn" data-tab="dashboard">Panel</button>
         </div>
 
         <section id="login" class="section active">
           <h2 class="title">Giriş Yap</h2>
-          <p class="muted">Kayıtlı hesabınla oturum aç.</p>
+          <p class="muted">Kullanıcı adı ve şifre alanını doldurup devam et.</p>
 
           <form id="loginForm" class="form">
-            <label for="loginEmail">E-posta</label>
-            <input type="email" id="loginEmail" placeholder="ornek@mail.com" required>
+            <label for="username">Kullanıcı Adı</label>
+            <input type="text" id="username" placeholder="kullaniciadi" required>
 
-            <label for="loginPassword">Şifre</label>
+            <label for="password">Şifre</label>
             <div class="password-wrap">
-              <input type="password" id="loginPassword" placeholder="Şifren" required>
-              <button type="button" class="toggle-btn" id="toggleLoginPassword">Göster</button>
+              <input type="password" id="password" placeholder="Şifre" required>
+              <button type="button" class="toggle-btn" id="togglePassword">Göster</button>
             </div>
 
             <button type="submit" class="btn btn-primary">Giriş Yap</button>
@@ -340,69 +315,37 @@
           </form>
 
           <div class="link-row">
-            <button class="link-btn" id="goRegisterBtn">Hesap oluştur</button>
-            <button class="link-btn" id="resetPasswordBtn">Şifremi unuttum</button>
+            <button class="link-btn" id="quickLoginBtn">Hızlı giriş</button>
+            <button class="link-btn" id="clearBtn">Alanları temizle</button>
           </div>
-        </section>
-
-        <section id="register" class="section">
-          <h2 class="title">Kayıt Ol</h2>
-          <p class="muted">Yeni hesap oluştur ve sisteme bağlan.</p>
-
-          <form id="registerForm" class="form">
-            <label for="registerName">Ad Soyad</label>
-            <input type="text" id="registerName" placeholder="Ad Soyad" required>
-
-            <label for="registerEmail">E-posta</label>
-            <input type="email" id="registerEmail" placeholder="ornek@mail.com" required>
-
-            <label for="registerPassword">Şifre</label>
-            <div class="password-wrap">
-              <input type="password" id="registerPassword" placeholder="En az 6 karakter" required>
-              <button type="button" class="toggle-btn" id="toggleRegisterPassword">Göster</button>
-            </div>
-
-            <label class="checkbox-line">
-              <input type="checkbox" id="acceptRules" required>
-              <span>Kullanım koşullarını kabul ediyorum.</span>
-            </label>
-
-            <button type="submit" class="btn btn-primary">Kayıt Ol</button>
-            <div id="registerMessage" class="message"></div>
-          </form>
         </section>
 
         <section id="dashboard" class="section">
           <h2 class="title">Kullanıcı Paneli</h2>
-          <p class="muted">Bu bölümde oturum açan kullanıcı kendi bilgilerini görür.</p>
+          <p class="muted">Bu demo panel, sadece arayüz geçişi içindir.</p>
 
           <div class="info-card">
             <div class="info-row">
-              <span>Ad Soyad</span>
+              <span>Kullanıcı Adı</span>
               <strong id="userName">-</strong>
             </div>
             <div class="info-row">
-              <span>E-posta</span>
-              <strong id="userEmail">-</strong>
+              <span>Oturum Durumu</span>
+              <strong id="sessionStatus">Kapalı</strong>
             </div>
             <div class="info-row">
-              <span>Kullanıcı ID</span>
-              <strong id="userId">-</strong>
+              <span>Şifre</span>
+              <strong>Görüntülenmez / kaydedilmez</strong>
             </div>
           </div>
 
           <div class="link-row" style="margin-top:18px;">
-            <button id="refreshUserBtn" class="btn btn-secondary" type="button">Bilgileri Yenile</button>
+            <button id="backBtn" class="btn btn-secondary" type="button">Girişe Dön</button>
             <button id="logoutBtn" class="btn btn-danger" type="button">Çıkış Yap</button>
           </div>
 
-          <div class="admin-note">
-            Tüm kullanıcıları bu HTML içinden güvenli biçimde listeleyemezsin. Yönetim için
-            <strong>Supabase Dashboard &gt; Authentication &gt; Users</strong> bölümünü kullan.
-          </div>
-
           <div class="footer-note">
-            Bu sayfa yalnızca kendi projen ve kendi kullanıcıların için uygundur.
+            Bu sürüm yalnızca ön yüz demosudur. Bilgiler hiçbir yere gönderilmez.
           </div>
         </section>
       </div>
@@ -410,37 +353,24 @@
   </div>
 
   <script>
-    const SUPABASE_URL = "BURAYA_SUPABASE_URL";
-    const SUPABASE_ANON_KEY = "BURAYA_SUPABASE_ANON_KEY";
-
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
     const tabs = document.querySelectorAll(".tab-btn");
     const sections = document.querySelectorAll(".section");
 
     const loginForm = document.getElementById("loginForm");
-    const registerForm = document.getElementById("registerForm");
-
-    const loginEmail = document.getElementById("loginEmail");
-    const loginPassword = document.getElementById("loginPassword");
-    const registerName = document.getElementById("registerName");
-    const registerEmail = document.getElementById("registerEmail");
-    const registerPassword = document.getElementById("registerPassword");
-
+    const usernameInput = document.getElementById("username");
+    const passwordInput = document.getElementById("password");
     const loginMessage = document.getElementById("loginMessage");
-    const registerMessage = document.getElementById("registerMessage");
 
-    const toggleLoginPassword = document.getElementById("toggleLoginPassword");
-    const toggleRegisterPassword = document.getElementById("toggleRegisterPassword");
+    const togglePassword = document.getElementById("togglePassword");
+    const quickLoginBtn = document.getElementById("quickLoginBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const backBtn = document.getElementById("backBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
 
     const userName = document.getElementById("userName");
-    const userEmail = document.getElementById("userEmail");
-    const userId = document.getElementById("userId");
+    const sessionStatus = document.getElementById("sessionStatus");
 
-    const goRegisterBtn = document.getElementById("goRegisterBtn");
-    const resetPasswordBtn = document.getElementById("resetPasswordBtn");
-    const logoutBtn = document.getElementById("logoutBtn");
-    const refreshUserBtn = document.getElementById("refreshUserBtn");
+    let currentUser = null;
 
     function showTab(tabId) {
       tabs.forEach(btn => {
@@ -455,144 +385,72 @@
       btn.addEventListener("click", () => showTab(btn.dataset.tab));
     });
 
-    goRegisterBtn.addEventListener("click", () => showTab("register"));
-
-    function togglePassword(input, button) {
-      const isPassword = input.type === "password";
-      input.type = isPassword ? "text" : "password";
-      button.textContent = isPassword ? "Gizle" : "Göster";
-    }
-
-    toggleLoginPassword.addEventListener("click", () => togglePassword(loginPassword, toggleLoginPassword));
-    toggleRegisterPassword.addEventListener("click", () => togglePassword(registerPassword, toggleRegisterPassword));
-
-    async function loadUser() {
-      const { data, error } = await supabaseClient.auth.getUser();
-
-      if (error || !data.user) {
-        userName.textContent = "-";
-        userEmail.textContent = "-";
-        userId.textContent = "-";
-        return false;
-      }
-
-      const user = data.user;
-      userName.textContent = user.user_metadata?.full_name || "Belirtilmemiş";
-      userEmail.textContent = user.email || "-";
-      userId.textContent = user.id || "-";
-      return true;
-    }
-
-    async function checkSessionOnLoad() {
-      const { data } = await supabaseClient.auth.getSession();
-      if (data.session) {
-        await loadUser();
-        showTab("dashboard");
+    function updatePanel() {
+      if (currentUser) {
+        userName.textContent = currentUser;
+        sessionStatus.textContent = "Açık";
       } else {
-        showTab("login");
+        userName.textContent = "-";
+        sessionStatus.textContent = "Kapalı";
       }
     }
 
-    loginForm.addEventListener("submit", async (e) => {
+    togglePassword.addEventListener("click", () => {
+      const isPassword = passwordInput.type === "password";
+      passwordInput.type = isPassword ? "text" : "password";
+      togglePassword.textContent = isPassword ? "Gizle" : "Göster";
+    });
+
+    loginForm.addEventListener("submit", (e) => {
       e.preventDefault();
+
+      const username = usernameInput.value.trim();
+      const password = passwordInput.value;
+
+      if (!username || !password) {
+        loginMessage.textContent = "Kullanıcı adı ve şifre gir.";
+        return;
+      }
+
       loginMessage.textContent = "Giriş yapılıyor...";
+      currentUser = username;
+      updatePanel();
 
-      const { error } = await supabaseClient.auth.signInWithPassword({
-        email: loginEmail.value.trim(),
-        password: loginPassword.value
-      });
-
-      if (error) {
-        loginMessage.textContent = "Hata: " + error.message;
-        return;
-      }
-
-      loginMessage.textContent = "Giriş başarılı.";
-      await loadUser();
-      setTimeout(() => showTab("dashboard"), 500);
+      passwordInput.value = "";
+      setTimeout(() => {
+        loginMessage.textContent = "";
+        showTab("dashboard");
+      }, 400);
     });
 
-    registerForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      if (registerPassword.value.length < 6) {
-        registerMessage.textContent = "Şifre en az 6 karakter olmalı.";
-        return;
-      }
-
-      if (!document.getElementById("acceptRules").checked) {
-        registerMessage.textContent = "Koşulları kabul etmelisin.";
-        return;
-      }
-
-      registerMessage.textContent = "Kayıt oluşturuluyor...";
-
-      const { error } = await supabaseClient.auth.signUp({
-        email: registerEmail.value.trim(),
-        password: registerPassword.value,
-        options: {
-          data: {
-            full_name: registerName.value.trim()
-          }
-        }
-      });
-
-      if (error) {
-        registerMessage.textContent = "Hata: " + error.message;
-        return;
-      }
-
-      registerMessage.textContent = "Kayıt başarılı. E-posta doğrulaması açıksa mailini kontrol et.";
-      registerForm.reset();
-      setTimeout(() => showTab("login"), 900);
+    quickLoginBtn.addEventListener("click", () => {
+      currentUser = usernameInput.value.trim() || "misafir";
+      passwordInput.value = "";
+      loginMessage.textContent = "";
+      updatePanel();
+      showTab("dashboard");
     });
 
-    resetPasswordBtn.addEventListener("click", async () => {
-      const emailValue = loginEmail.value.trim();
-
-      if (!emailValue) {
-        loginMessage.textContent = "Önce giriş bölümüne e-posta yaz.";
-        return;
-      }
-
-      loginMessage.textContent = "Sıfırlama bağlantısı gönderiliyor...";
-
-      const { error } = await supabaseClient.auth.resetPasswordForEmail(emailValue, {
-        redirectTo: window.location.href
-      });
-
-      if (error) {
-        loginMessage.textContent = "Hata: " + error.message;
-        return;
-      }
-
-      loginMessage.textContent = "Şifre sıfırlama bağlantısı gönderildi.";
+    clearBtn.addEventListener("click", () => {
+      usernameInput.value = "";
+      passwordInput.value = "";
+      loginMessage.textContent = "";
     });
 
-    logoutBtn.addEventListener("click", async () => {
-      await supabaseClient.auth.signOut();
-      userName.textContent = "-";
-      userEmail.textContent = "-";
-      userId.textContent = "-";
+    backBtn.addEventListener("click", () => {
       showTab("login");
     });
 
-    refreshUserBtn.addEventListener("click", async () => {
-      const ok = await loadUser();
-      if (!ok) showTab("login");
+    logoutBtn.addEventListener("click", () => {
+      currentUser = null;
+      updatePanel();
+      usernameInput.value = "";
+      passwordInput.value = "";
+      loginMessage.textContent = "";
+      showTab("login");
     });
 
-    supabaseClient.auth.onAuthStateChange(async (event) => {
-      if (event === "SIGNED_IN") {
-        await loadUser();
-        showTab("dashboard");
-      }
-      if (event === "SIGNED_OUT") {
-        showTab("login");
-      }
-    });
-
-    checkSessionOnLoad();
+    updatePanel();
   </script>
 </body>
 </html>
