@@ -3,54 +3,53 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Z Altın | Giriş Yap</title>
+  <title>Z Altın | Üyelik Sistemi</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
     body{
       min-height:100vh;
-      background:
-        radial-gradient(circle at top left, rgba(255,204,0,.15), transparent 25%),
-        radial-gradient(circle at bottom right, rgba(255,140,0,.14), transparent 22%),
-        linear-gradient(135deg,#0d1016,#141923,#0a0c11);
       color:#fff;
-      display:flex;
-      align-items:center;
-      justify-content:center;
+      background:
+        radial-gradient(circle at top left, rgba(255,204,0,.14), transparent 25%),
+        radial-gradient(circle at bottom right, rgba(255,140,0,.12), transparent 24%),
+        linear-gradient(135deg,#0c1016,#141a25,#090c11);
       padding:24px;
     }
-    .wrap{
-      width:100%;
-      max-width:1100px;
-      min-height:650px;
+    .app{
+      max-width:1200px;
+      margin:0 auto;
+      min-height:calc(100vh - 48px);
       display:grid;
-      grid-template-columns:1fr 1fr;
+      grid-template-columns:1.05fr .95fr;
+      background:rgba(255,255,255,.03);
       border:1px solid rgba(255,255,255,.08);
       border-radius:24px;
       overflow:hidden;
-      background:rgba(255,255,255,.03);
       box-shadow:0 30px 80px rgba(0,0,0,.35);
       backdrop-filter:blur(10px);
     }
-    .left{
+    .hero{
+      position:relative;
       padding:48px;
       display:flex;
       flex-direction:column;
-      justify-content:center;
+      justify-content:space-between;
       background:
-        linear-gradient(180deg, rgba(0,0,0,.12), rgba(0,0,0,.35)),
+        linear-gradient(180deg, rgba(0,0,0,.12), rgba(0,0,0,.4)),
         url("https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1400&q=80") center/cover no-repeat;
-      position:relative;
     }
-    .left::after{
+    .hero::after{
       content:"";
       position:absolute;
       inset:0;
-      background:linear-gradient(120deg, rgba(10,12,17,.35), rgba(10,12,17,.72));
+      background:linear-gradient(120deg, rgba(9,12,17,.35), rgba(9,12,17,.74));
     }
-    .left>*{position:relative;z-index:1}
+    .hero>*{position:relative;z-index:1}
     .brand{
-      display:inline-block;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
       width:fit-content;
       padding:10px 16px;
       border-radius:999px;
@@ -59,45 +58,92 @@
       font-weight:800;
       margin-bottom:24px;
     }
-    .left h1{
-      font-size:52px;
-      line-height:1.05;
+    .hero h1{
+      font-size:54px;
+      line-height:1.03;
       margin-bottom:18px;
     }
-    .left p{
-      max-width:480px;
+    .hero p{
+      max-width:520px;
       font-size:17px;
       line-height:1.7;
       color:rgba(255,255,255,.88);
     }
-    .right{
+    .hero-grid{
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+      margin-top:28px;
+    }
+    .hero-box{
+      min-width:160px;
+      padding:16px 18px;
+      border-radius:16px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .hero-box small{
+      display:block;
+      color:rgba(255,255,255,.6);
+      margin-bottom:6px;
+      font-size:12px;
+    }
+    .hero-box strong{font-size:16px}
+    .panel{
+      padding:34px;
       display:flex;
       align-items:center;
       justify-content:center;
-      padding:34px;
+      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
     }
     .card{
       width:100%;
-      max-width:430px;
+      max-width:460px;
       background:rgba(255,255,255,.04);
       border:1px solid rgba(255,255,255,.08);
       border-radius:20px;
-      padding:30px;
+      padding:28px;
     }
-    .card h2{
-      font-size:32px;
+    .tabs{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:10px;
+      margin-bottom:20px;
+    }
+    .tab-btn{
+      height:46px;
+      border:none;
+      border-radius:14px;
+      background:rgba(255,255,255,.05);
+      color:#fff;
+      cursor:pointer;
+      font-weight:700;
+      transition:.2s ease;
+    }
+    .tab-btn.active{
+      background:linear-gradient(135deg,#ffcc00,#ff9500);
+      color:#111;
+    }
+    .section{display:none}
+    .section.active{display:block}
+    .title{
+      font-size:30px;
       margin-bottom:8px;
     }
     .muted{
       color:rgba(255,255,255,.68);
       line-height:1.6;
-      margin-bottom:24px;
+      margin-bottom:22px;
     }
-    .form{display:flex;flex-direction:column;gap:10px}
+    .form{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
     .form label{
       font-size:14px;
-      color:#f1f1f1;
       margin-top:4px;
+      color:#f1f1f1;
     }
     .form input{
       width:100%;
@@ -117,8 +163,8 @@
     .password-wrap{position:relative}
     .toggle-btn{
       position:absolute;
-      top:50%;
       right:10px;
+      top:50%;
       transform:translateY(-50%);
       border:none;
       background:transparent;
@@ -126,8 +172,20 @@
       cursor:pointer;
       font-weight:700;
     }
-    .primary-btn{
-      margin-top:10px;
+    .checkbox-line{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-top:8px;
+      font-size:14px;
+      color:rgba(255,255,255,.84);
+    }
+    .checkbox-line input{
+      width:18px;
+      height:18px;
+      accent-color:#ffcc00;
+    }
+    .btn{
       width:100%;
       height:54px;
       border:none;
@@ -135,71 +193,220 @@
       cursor:pointer;
       font-size:15px;
       font-weight:800;
+      transition:.2s ease;
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn-primary{
       background:linear-gradient(135deg,#ffcc00,#ff9500);
       color:#111;
+      margin-top:10px;
+    }
+    .btn-danger{
+      background:#ff4d4f;
+      color:#fff;
+    }
+    .btn-secondary{
+      background:rgba(255,255,255,.06);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.08);
     }
     .message{
       min-height:22px;
       margin-top:10px;
       font-size:14px;
       color:#ffd36a;
+      line-height:1.5;
     }
-    .footer-links{
+    .link-row{
       display:flex;
       justify-content:space-between;
-      align-items:center;
-      gap:12px;
-      margin-top:18px;
+      gap:10px;
       flex-wrap:wrap;
+      margin-top:16px;
     }
-    .footer-links a,.link-btn{
-      color:#ffcc00;
-      text-decoration:none;
-      font-size:14px;
+    .link-btn{
       background:none;
       border:none;
+      color:#ffcc00;
       cursor:pointer;
+      font-size:14px;
+      padding:0;
     }
-    @media(max-width:900px){
-      .wrap{grid-template-columns:1fr}
-      .left{min-height:300px}
-      .left h1{font-size:38px}
+    .info-card{
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:16px;
+      padding:18px;
+      margin-top:18px;
+    }
+    .info-row{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      padding:12px 0;
+      border-bottom:1px solid rgba(255,255,255,.07);
+      flex-wrap:wrap;
+    }
+    .info-row:last-child{border-bottom:none}
+    .info-row span{color:rgba(255,255,255,.65)}
+    .info-row strong{
+      max-width:65%;
+      word-break:break-word;
+      text-align:right;
+    }
+    .admin-note{
+      margin-top:16px;
+      padding:14px;
+      border-radius:14px;
+      background:rgba(255,204,0,.08);
+      border:1px solid rgba(255,204,0,.18);
+      color:#ffe39b;
+      font-size:13px;
+      line-height:1.6;
+    }
+    .footer-note{
+      margin-top:16px;
+      font-size:12px;
+      color:rgba(255,255,255,.5);
+      line-height:1.6;
+    }
+    @media(max-width:980px){
+      .app{grid-template-columns:1fr}
+      .hero{min-height:320px}
+      .hero h1{font-size:38px}
+    }
+    @media(max-width:520px){
+      body{padding:14px}
+      .hero,.panel{padding:22px}
+      .card{padding:20px}
+      .tabs{grid-template-columns:1fr}
+      .hero h1{font-size:31px}
+      .title{font-size:25px}
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="left">
-      <div class="brand">Z Altın</div>
-      <h1>Hesabına giriş yap</h1>
-      <p>Güvenli şekilde hesabına bağlan, paneline eriş ve kullanıcı alanını yönet.</p>
-    </div>
+  <div class="app">
+    <section class="hero">
+      <div>
+        <div class="brand">Z Altın</div>
+        <h1>Gerçek çalışan üyelik sistemi</h1>
+        <p>
+          Tek dosyalık arayüz ile kayıt, giriş, oturum kontrolü, kendi hesap bilgilerini görüntüleme
+          ve çıkış işlemleri tek yerden yönetilir.
+        </p>
+      </div>
 
-    <div class="right">
-      <div class="card">
-        <h2>Giriş Yap</h2>
-        <p class="muted">Devam etmek için e-posta ve şifreni gir.</p>
-
-        <form id="loginForm" class="form">
-          <label for="email">E-posta</label>
-          <input type="email" id="email" placeholder="ornek@mail.com" required />
-
-          <label for="password">Şifre</label>
-          <div class="password-wrap">
-            <input type="password" id="password" placeholder="Şifreniz" required />
-            <button type="button" class="toggle-btn" id="togglePassword">Göster</button>
-          </div>
-
-          <button type="submit" class="primary-btn">Giriş Yap</button>
-          <div id="message" class="message"></div>
-        </form>
-
-        <div class="footer-links">
-          <a href="register.html">Hesap oluştur</a>
-          <button class="link-btn" id="resetPasswordBtn" type="button">Şifremi unuttum</button>
+      <div class="hero-grid">
+        <div class="hero-box">
+          <small>Kayıt</small>
+          <strong>E-posta + şifre</strong>
+        </div>
+        <div class="hero-box">
+          <small>Oturum</small>
+          <strong>Gerçek auth</strong>
+        </div>
+        <div class="hero-box">
+          <small>Yönetim</small>
+          <strong>Supabase panel</strong>
         </div>
       </div>
-    </div>
+    </section>
+
+    <section class="panel">
+      <div class="card">
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="login">Giriş</button>
+          <button class="tab-btn" data-tab="register">Kayıt</button>
+          <button class="tab-btn" data-tab="dashboard">Panel</button>
+        </div>
+
+        <section id="login" class="section active">
+          <h2 class="title">Giriş Yap</h2>
+          <p class="muted">Kayıtlı hesabınla oturum aç.</p>
+
+          <form id="loginForm" class="form">
+            <label for="loginEmail">E-posta</label>
+            <input type="email" id="loginEmail" placeholder="ornek@mail.com" required>
+
+            <label for="loginPassword">Şifre</label>
+            <div class="password-wrap">
+              <input type="password" id="loginPassword" placeholder="Şifren" required>
+              <button type="button" class="toggle-btn" id="toggleLoginPassword">Göster</button>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Giriş Yap</button>
+            <div id="loginMessage" class="message"></div>
+          </form>
+
+          <div class="link-row">
+            <button class="link-btn" id="goRegisterBtn">Hesap oluştur</button>
+            <button class="link-btn" id="resetPasswordBtn">Şifremi unuttum</button>
+          </div>
+        </section>
+
+        <section id="register" class="section">
+          <h2 class="title">Kayıt Ol</h2>
+          <p class="muted">Yeni hesap oluştur ve sisteme bağlan.</p>
+
+          <form id="registerForm" class="form">
+            <label for="registerName">Ad Soyad</label>
+            <input type="text" id="registerName" placeholder="Ad Soyad" required>
+
+            <label for="registerEmail">E-posta</label>
+            <input type="email" id="registerEmail" placeholder="ornek@mail.com" required>
+
+            <label for="registerPassword">Şifre</label>
+            <div class="password-wrap">
+              <input type="password" id="registerPassword" placeholder="En az 6 karakter" required>
+              <button type="button" class="toggle-btn" id="toggleRegisterPassword">Göster</button>
+            </div>
+
+            <label class="checkbox-line">
+              <input type="checkbox" id="acceptRules" required>
+              <span>Kullanım koşullarını kabul ediyorum.</span>
+            </label>
+
+            <button type="submit" class="btn btn-primary">Kayıt Ol</button>
+            <div id="registerMessage" class="message"></div>
+          </form>
+        </section>
+
+        <section id="dashboard" class="section">
+          <h2 class="title">Kullanıcı Paneli</h2>
+          <p class="muted">Bu bölümde oturum açan kullanıcı kendi bilgilerini görür.</p>
+
+          <div class="info-card">
+            <div class="info-row">
+              <span>Ad Soyad</span>
+              <strong id="userName">-</strong>
+            </div>
+            <div class="info-row">
+              <span>E-posta</span>
+              <strong id="userEmail">-</strong>
+            </div>
+            <div class="info-row">
+              <span>Kullanıcı ID</span>
+              <strong id="userId">-</strong>
+            </div>
+          </div>
+
+          <div class="link-row" style="margin-top:18px;">
+            <button id="refreshUserBtn" class="btn btn-secondary" type="button">Bilgileri Yenile</button>
+            <button id="logoutBtn" class="btn btn-danger" type="button">Çıkış Yap</button>
+          </div>
+
+          <div class="admin-note">
+            Tüm kullanıcıları bu HTML içinden güvenli biçimde listeleyemezsin. Yönetim için
+            <strong>Supabase Dashboard &gt; Authentication &gt; Users</strong> bölümünü kullan.
+          </div>
+
+          <div class="footer-note">
+            Bu sayfa yalnızca kendi projen ve kendi kullanıcıların için uygundur.
+          </div>
+        </section>
+      </div>
+    </section>
   </div>
 
   <script>
@@ -208,64 +415,184 @@
 
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    const loginForm = document.getElementById("loginForm");
-    const email = document.getElementById("email");
-    const password = document.getElementById("password");
-    const message = document.getElementById("message");
-    const togglePassword = document.getElementById("togglePassword");
-    const resetPasswordBtn = document.getElementById("resetPasswordBtn");
+    const tabs = document.querySelectorAll(".tab-btn");
+    const sections = document.querySelectorAll(".section");
 
-    togglePassword.addEventListener("click", () => {
-      const isPassword = password.type === "password";
-      password.type = isPassword ? "text" : "password";
-      togglePassword.textContent = isPassword ? "Gizle" : "Göster";
+    const loginForm = document.getElementById("loginForm");
+    const registerForm = document.getElementById("registerForm");
+
+    const loginEmail = document.getElementById("loginEmail");
+    const loginPassword = document.getElementById("loginPassword");
+    const registerName = document.getElementById("registerName");
+    const registerEmail = document.getElementById("registerEmail");
+    const registerPassword = document.getElementById("registerPassword");
+
+    const loginMessage = document.getElementById("loginMessage");
+    const registerMessage = document.getElementById("registerMessage");
+
+    const toggleLoginPassword = document.getElementById("toggleLoginPassword");
+    const toggleRegisterPassword = document.getElementById("toggleRegisterPassword");
+
+    const userName = document.getElementById("userName");
+    const userEmail = document.getElementById("userEmail");
+    const userId = document.getElementById("userId");
+
+    const goRegisterBtn = document.getElementById("goRegisterBtn");
+    const resetPasswordBtn = document.getElementById("resetPasswordBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const refreshUserBtn = document.getElementById("refreshUserBtn");
+
+    function showTab(tabId) {
+      tabs.forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.tab === tabId);
+      });
+      sections.forEach(section => {
+        section.classList.toggle("active", section.id === tabId);
+      });
+    }
+
+    tabs.forEach(btn => {
+      btn.addEventListener("click", () => showTab(btn.dataset.tab));
     });
 
-    async function checkSession() {
+    goRegisterBtn.addEventListener("click", () => showTab("register"));
+
+    function togglePassword(input, button) {
+      const isPassword = input.type === "password";
+      input.type = isPassword ? "text" : "password";
+      button.textContent = isPassword ? "Gizle" : "Göster";
+    }
+
+    toggleLoginPassword.addEventListener("click", () => togglePassword(loginPassword, toggleLoginPassword));
+    toggleRegisterPassword.addEventListener("click", () => togglePassword(registerPassword, toggleRegisterPassword));
+
+    async function loadUser() {
+      const { data, error } = await supabaseClient.auth.getUser();
+
+      if (error || !data.user) {
+        userName.textContent = "-";
+        userEmail.textContent = "-";
+        userId.textContent = "-";
+        return false;
+      }
+
+      const user = data.user;
+      userName.textContent = user.user_metadata?.full_name || "Belirtilmemiş";
+      userEmail.textContent = user.email || "-";
+      userId.textContent = user.id || "-";
+      return true;
+    }
+
+    async function checkSessionOnLoad() {
       const { data } = await supabaseClient.auth.getSession();
       if (data.session) {
-        window.location.href = "panel.html";
+        await loadUser();
+        showTab("dashboard");
+      } else {
+        showTab("login");
       }
     }
 
-    checkSession();
-
     loginForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-      message.textContent = "Giriş yapılıyor...";
+      loginMessage.textContent = "Giriş yapılıyor...";
 
       const { error } = await supabaseClient.auth.signInWithPassword({
-        email: email.value.trim(),
-        password: password.value
+        email: loginEmail.value.trim(),
+        password: loginPassword.value
       });
 
       if (error) {
-        message.textContent = "Hata: " + error.message;
+        loginMessage.textContent = "Hata: " + error.message;
         return;
       }
 
-      message.textContent = "Giriş başarılı, yönlendiriliyorsun...";
-      setTimeout(() => {
-        window.location.href = "panel.html";
-      }, 800);
+      loginMessage.textContent = "Giriş başarılı.";
+      await loadUser();
+      setTimeout(() => showTab("dashboard"), 500);
+    });
+
+    registerForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      if (registerPassword.value.length < 6) {
+        registerMessage.textContent = "Şifre en az 6 karakter olmalı.";
+        return;
+      }
+
+      if (!document.getElementById("acceptRules").checked) {
+        registerMessage.textContent = "Koşulları kabul etmelisin.";
+        return;
+      }
+
+      registerMessage.textContent = "Kayıt oluşturuluyor...";
+
+      const { error } = await supabaseClient.auth.signUp({
+        email: registerEmail.value.trim(),
+        password: registerPassword.value,
+        options: {
+          data: {
+            full_name: registerName.value.trim()
+          }
+        }
+      });
+
+      if (error) {
+        registerMessage.textContent = "Hata: " + error.message;
+        return;
+      }
+
+      registerMessage.textContent = "Kayıt başarılı. E-posta doğrulaması açıksa mailini kontrol et.";
+      registerForm.reset();
+      setTimeout(() => showTab("login"), 900);
     });
 
     resetPasswordBtn.addEventListener("click", async () => {
-      if (!email.value.trim()) {
-        message.textContent = "Önce e-posta alanını doldur.";
+      const emailValue = loginEmail.value.trim();
+
+      if (!emailValue) {
+        loginMessage.textContent = "Önce giriş bölümüne e-posta yaz.";
         return;
       }
 
-      const { error } = await supabaseClient.auth.resetPasswordForEmail(email.value.trim(), {
-        redirectTo: window.location.origin + "/index.html"
+      loginMessage.textContent = "Sıfırlama bağlantısı gönderiliyor...";
+
+      const { error } = await supabaseClient.auth.resetPasswordForEmail(emailValue, {
+        redirectTo: window.location.href
       });
 
       if (error) {
-        message.textContent = "Hata: " + error.message;
-      } else {
-        message.textContent = "Şifre sıfırlama bağlantısı gönderildi.";
+        loginMessage.textContent = "Hata: " + error.message;
+        return;
+      }
+
+      loginMessage.textContent = "Şifre sıfırlama bağlantısı gönderildi.";
+    });
+
+    logoutBtn.addEventListener("click", async () => {
+      await supabaseClient.auth.signOut();
+      userName.textContent = "-";
+      userEmail.textContent = "-";
+      userId.textContent = "-";
+      showTab("login");
+    });
+
+    refreshUserBtn.addEventListener("click", async () => {
+      const ok = await loadUser();
+      if (!ok) showTab("login");
+    });
+
+    supabaseClient.auth.onAuthStateChange(async (event) => {
+      if (event === "SIGNED_IN") {
+        await loadUser();
+        showTab("dashboard");
+      }
+      if (event === "SIGNED_OUT") {
+        showTab("login");
       }
     });
+
+    checkSessionOnLoad();
   </script>
 </body>
 </html>
